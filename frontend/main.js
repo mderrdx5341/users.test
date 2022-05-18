@@ -1,3 +1,4 @@
 import './scss/app.scss';
+import App from './ts/App.ts';
 
-console.log(1);
+window.onload = () => (new App('#app')).run()
