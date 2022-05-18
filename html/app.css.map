@@ -1,0 +1,1 @@
+{"version":3,"file":"app.css","mappings":"AAAA,UACC,QAAS,CACT,SAAU","sources":["webpack://war_for_war/./frontend/scss/app.scss"],"sourcesContent":["html, body {\n\tmargin: 0;\n\tpadding: 0;\n}\n"],"names":[],"sourceRoot":""}
