@@ -19,7 +19,6 @@ class UsersPanel
 			this._html.appendChild(userTemplate.buildHtmlElement());
 		});
 
-		console.log(this._html);
 		return this._html;
 	}
 
