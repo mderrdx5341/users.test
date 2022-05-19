@@ -1,6 +1,6 @@
 import User from './User';
 
-class UserTemplate
+class UserListTemplate
 {
 	private _user: User;
 
@@ -27,4 +27,4 @@ class UserTemplate
 	}
 }
 
-export default UserTemplate;
+export default UserListTemplate;

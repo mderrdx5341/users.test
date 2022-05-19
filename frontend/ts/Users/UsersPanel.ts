@@ -1,5 +1,5 @@
 import User from './User';
-import UserTemplate from './UserTemplate';
+import UserListTemplate from './UserListTemplate';
 
 class UsersPanel
 {
@@ -15,9 +15,11 @@ class UsersPanel
 	{
 		let users = await this._getUsers();
 		users.forEach((user: User) => {
-			let userTemplate = new UserTemplate(user);
+			let userTemplate = new UserListTemplate(user);
 			this._html.appendChild(userTemplate.buildHtmlElement());
 		});
+
+		this._html.appendChild(this._buildHtmlButtonAdd());
 
 		return this._html;
 	}
@@ -42,6 +44,13 @@ class UsersPanel
 		}
 
 		return users;
+	}
+
+	public _buildHtmlButtonAdd() : HTMLElement
+	{
+		let btn = document.createElement('button');
+		btn.innerHTML = 'Add';
+		return btn;
 	}
 }
 
