@@ -31,7 +31,7 @@ class App implements SubscriberInterface
 				await this._usersPanel.switchToAddUser();
 				break;
 			case 'EditUser':
-				await this._usersPanel.switchToEditUser();
+				await this._usersPanel.switchToEditUser(eventData.id());
 				break;
 		}
 	}

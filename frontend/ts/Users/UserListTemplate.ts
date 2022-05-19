@@ -37,7 +37,7 @@ class UserListTemplate
 		link.addEventListener('click', event => {
 			event.preventDefault();
 			AppEventManager.trigger(
-				new AppEvent('changePanel', new AppEventData('EditUser'))
+				new AppEvent('changePanel', new AppEventData('EditUser', this._user.id()))
 			);
 		});
 

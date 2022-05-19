@@ -31,10 +31,10 @@ class UsersPanel
 		await this._addUser();
 	}
 
-	public async switchToEditUser() : Promise<void>
+	public async switchToEditUser(id: number) : Promise<void>
 	{
 		this._clearHtml();
-		await this._editUser();
+		await this._editUser(id);
 	}
 
 	public async buildHtmlElement() : Promise<HTMLElement>
@@ -65,9 +65,9 @@ class UsersPanel
 		this._html.appendChild(userAddTemplate.buildHtmlElement());
 	}
 
-	private async _editUser() : Promise<void>
+	private async _editUser(id: number) : Promise<void>
 	{
-		let user = await this._getUser(1);
+		let user = await this._getUser(id);
 		let userEditTemplate = new UserEditTemplate(user);
 		this._html.appendChild(userEditTemplate.buildHtmlElement());
 	}
