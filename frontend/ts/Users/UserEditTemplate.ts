@@ -77,6 +77,12 @@ class UserEditTemplate
 		});
 		if (response.ok) { 
 			let json = await response.json();
+			if (json.message === 'not_auth') {
+				AppEventManager.trigger(
+					new AppEvent('changePanel', new AppEventData('Auth'))
+				);
+				return;
+			}
 			alert('User updated');
 		} else {
 		  alert("Error HTTP: " + response.status);

@@ -1,7 +1,9 @@
+import App from '../App';
 import User from './User';
 import UserListTemplate from './UserListTemplate';
 import UserAddTemplate from './UserAddTemplate';
 import UserEditTemplate from './UserEditTemplate';
+import AuthAdminTemplate from './AuthAdminTemplate'
 
 import AppEventManager from '../Event/AppEventManager';
 import AppEvent from '../Event/AppEvent';
@@ -37,6 +39,12 @@ class UsersPanel
 		await this._editUser(id);
 	}
 
+	public async switchToAuthAdmin() : Promise<void>
+	{
+		this._clearHtml();
+		await this._adminAuth();
+	}
+
 	public async buildHtmlElement() : Promise<HTMLElement>
 	{
 		return this._html;
@@ -50,6 +58,10 @@ class UsersPanel
 	private async _listUsers () : Promise<void>
 	{
 		let users = await this._getUsers();
+		console.log(App.auth);
+		if (users.length === 0 && App.auth === false) {
+			return;
+		}
 		users.forEach((user: User) => {
 			let userListTemplate = new UserListTemplate(user);
 			this._html.appendChild(userListTemplate.buildHtmlElement());
@@ -72,6 +84,12 @@ class UsersPanel
 		this._html.appendChild(userEditTemplate.buildHtmlElement());
 	}
 
+	private async _adminAuth(): Promise<void>
+	{
+		let authAdminTemplate = new AuthAdminTemplate();
+		this._html.appendChild(authAdminTemplate.buildHtmlElement());
+	}
+
 	private async _getUser(id: number) : Promise<User>
 	{
 		let data = {id: id}
@@ -85,6 +103,13 @@ class UsersPanel
 		});
 		if (response.ok) { 
 			let json = await response.json();
+			if (json.message === 'not_auth') {
+				AppEventManager.trigger(
+					new AppEvent('changePanel', new AppEventData('Auth'))
+				);
+
+				return;
+			}
 			user = new User(
 				json.id,
 				json.name,
@@ -104,6 +129,13 @@ class UsersPanel
 		let response = await fetch('/users/');
 		if (response.ok) { 
 			let json = await response.json();
+			if (json.message === 'not_auth') {
+				AppEventManager.trigger(
+					new AppEvent('changePanel', new AppEventData('Auth'))
+				);
+
+				return users;
+			}
 			json.forEach((userJson: {id: number, name: string, email: string, address: string}) => {
 				let user = new User(
 					userJson.id,
@@ -163,6 +195,14 @@ class UsersPanel
 			});
 			if (response.ok) { 
 				let json = await response.json();
+
+				if (json.message === 'not_auth') {
+					AppEventManager.trigger(
+						new AppEvent('changePanel', new AppEventData('Auth'))
+					);
+					return;
+				}
+
 				AppEventManager.trigger(
 					new AppEvent('changePanel', new AppEventData('UserList'))
 				);

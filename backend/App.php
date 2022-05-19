@@ -29,4 +29,12 @@ class App
 	{
 		echo $this->router->run();
 	}
+
+	public static function isAuth() : bool
+	{
+		if(isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
+			return true;
+		}
+		return false;
+	}
 }

@@ -5,6 +5,7 @@ import AppEventData from './Event/AppEventData';
 
 class App implements SubscriberInterface
 {
+	public static auth = false;
 	private _appContainer: HTMLElement;
 	private _usersPanel: UsersPanel;
 
@@ -32,6 +33,9 @@ class App implements SubscriberInterface
 				break;
 			case 'EditUser':
 				await this._usersPanel.switchToEditUser(eventData.id());
+				break;
+			case 'Auth':
+				await this._usersPanel.switchToAuthAdmin();
 				break;
 		}
 	}
