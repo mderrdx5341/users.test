@@ -3,11 +3,14 @@ namespace Controllers;
 
 abstract class AbstractController
 {
-	public function __construct() {
+	protected $db;
+
+	public function __construct($db) {
+		$this->db = $db;
 		$this->afterInit();
 	}
 
-	public function afterInit() {}
+	protected function afterInit() {}
 
 	public function jsonResponse($data)
 	{
