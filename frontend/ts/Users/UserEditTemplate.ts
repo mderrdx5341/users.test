@@ -3,6 +3,7 @@ import User from './User';
 import AppEventManager from '../Event/AppEventManager';
 import AppEvent from '../Event/AppEvent';
 import AppEventData from '../Event/AppEventData';
+import App from '../App';
 
 class UserEditTemplate
 {
@@ -83,6 +84,7 @@ class UserEditTemplate
 				);
 				return;
 			}
+			App.auth = true;
 			alert('User updated');
 		} else {
 		  alert("Error HTTP: " + response.status);

@@ -4,6 +4,8 @@ import AppEventManager from '../Event/AppEventManager';
 import AppEvent from '../Event/AppEvent';
 import AppEventData from '../Event/AppEventData';
 
+import App from '../App';
+
 class UserAddTemplate
 {
 	private _form: HTMLElement;
@@ -79,6 +81,7 @@ class UserAddTemplate
 				);
 				return;
 			}
+			App.auth = true;
 			alert('User added');
 		} else {
 		  alert("Error HTTP: " + response.status);

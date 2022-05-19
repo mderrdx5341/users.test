@@ -110,6 +110,8 @@ class UsersPanel
 
 				return;
 			}
+			App.auth = true;
+
 			user = new User(
 				json.id,
 				json.name,
@@ -136,6 +138,7 @@ class UsersPanel
 
 				return users;
 			}
+			App.auth = true;
 			json.forEach((userJson: {id: number, name: string, email: string, address: string}) => {
 				let user = new User(
 					userJson.id,
@@ -202,7 +205,7 @@ class UsersPanel
 					);
 					return;
 				}
-
+				App.auth = true;
 				AppEventManager.trigger(
 					new AppEvent('changePanel', new AppEventData('UserList'))
 				);
