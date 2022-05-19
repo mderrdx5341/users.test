@@ -1,7 +1,7 @@
 <?php
 namespace DB\Query;
 
-class Select
+class Update
 {
 	private $tableName;
 	private $fields;
@@ -14,9 +14,12 @@ class Select
 		$this->conditions = [];
 	}
 
-	public function addField($field)
+	public function addField($field, $val, $shield = false)
 	{
-		$this->fields[] = $field;
+		if ($shield) {
+			$val = "'" . $val . "'";
+		}
+		$this->fields[] = $field .' = '. $val;
 
 		return $this;
 	}
@@ -34,9 +37,9 @@ class Select
 
 	public function build()
 	{
-		$str = 'select ';
+		$str = 'update ';
+		$str .= $this->tableName . ' set ';
 		$str .= $this->fields();
-		$str .= ' from ' . $this->tableName;
 		$str .= $this->whereBuild();
 		return $str;
 	}

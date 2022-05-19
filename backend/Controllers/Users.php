@@ -42,4 +42,34 @@ class Users extends AbstractController
 		$response = ['id' => $id];
 		return $this->jsonResponse($response);
 	}
+
+	public function getById() : string
+	{
+		$data = $this->jsonRequest();
+		$user = $this->usersRepository->getById($data['id']);
+		$response =  [
+			'id' => $user->id(),
+			'name' => $user->name(),
+			'email' => $user->email(),
+			'address' => $user->address(),
+		];
+
+		return $this->jsonResponse($response);
+	}
+
+	public function update() : string
+	{
+		$data = $this->jsonRequest();
+		$user = new User(
+			$data['id'],
+			$data['name'],
+			$data['email'],
+			$data['address'],
+		);
+
+		$id = $this->usersRepository->update($user);
+
+		$response = ['id' => $data['id']];
+		return $this->jsonResponse($response);
+	}
 }

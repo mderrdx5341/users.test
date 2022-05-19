@@ -1,6 +1,11 @@
 import User from './User';
 import UserListTemplate from './UserListTemplate';
 import UserAddTemplate from './UserAddTemplate';
+import UserEditTemplate from './UserEditTemplate';
+
+import AppEventManager from '../Event/AppEventManager';
+import AppEvent from '../Event/AppEvent';
+import AppEventData from '../Event/AppEventData';
 
 class UsersPanel
 {
@@ -14,28 +19,32 @@ class UsersPanel
 		this._template = 'list';
 	}
 
-	public switchToListUsers() : void
+	public async switchToListUsers() : Promise<void>
 	{
-		this._template = 'list';
+		this._clearHtml();
+		await this._listUsers();
 	}
 
-	public switchToAddUser() : void
+	public async switchToAddUser() : Promise<void>
 	{
-		this._template = 'add';
+		this._clearHtml();
+		await this._addUser();
+	}
+
+	public async switchToEditUser() : Promise<void>
+	{
+		this._clearHtml();
+		await this._editUser();
 	}
 
 	public async buildHtmlElement() : Promise<HTMLElement>
 	{
-		switch(this._template) {
-			case 'list':
-				await this._listUsers();
-				break;
-			case 'add':
-				await this._addUser();
-				break;
-		}
-
 		return this._html;
+	}
+
+	private _clearHtml()
+	{
+		this._html.innerHTML = '';
 	}
 
 	private async _listUsers () : Promise<void>
@@ -53,6 +62,39 @@ class UsersPanel
 	{
 		let userAddTemplate = new UserAddTemplate();
 		this._html.appendChild(userAddTemplate.buildHtmlElement());
+	}
+
+	private async _editUser() : Promise<void>
+	{
+		let user = await this._getUser(1);
+		let userEditTemplate = new UserEditTemplate(user);
+		this._html.appendChild(userEditTemplate.buildHtmlElement());
+	}
+
+	private async _getUser(id: number) : Promise<User>
+	{
+		let data = {id: id}
+		let user: User;
+		let response = await fetch('/users/get-by-id/', {
+			method: 'POST',
+			headers: {
+			  'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		});
+		if (response.ok) { 
+			let json = await response.json();
+			user = new User(
+				json.id,
+				json.name,
+				json.email,
+				json.address
+			);
+		} else {
+		  alert("Error HTTP: " + response.status);
+		}
+
+		return user;
 	}
 
 	private async _getUsers() : Promise<User[]>
@@ -83,7 +125,9 @@ class UsersPanel
 		btn.innerHTML = 'Add';
 		btn.addEventListener('click', event => {
 			event.preventDefault();
-			this.switchToAddUser();
+			AppEventManager.trigger(
+				new AppEvent('changePanel', new AppEventData('AddUser'))
+			);
 		});
 		return btn;
 	}

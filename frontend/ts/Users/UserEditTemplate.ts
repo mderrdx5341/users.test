@@ -4,12 +4,14 @@ import AppEventManager from '../Event/AppEventManager';
 import AppEvent from '../Event/AppEvent';
 import AppEventData from '../Event/AppEventData';
 
-class UserAddTemplate
+class UserEditTemplate
 {
+	private _user: User;
 	private _form: HTMLElement;
 
-	constructor()
+	constructor(user: User)
 	{
+		this._user = user;
 		this._form = document.createElement('form');
 	}
 
@@ -17,26 +19,27 @@ class UserAddTemplate
 	{
 		this._form.innerHTML = 
 			`
-				<div>Name: <input class="name" required name="name"></div>
-				<div>Email: <input class="email" required name="email"></div>
-				<div>Address: <input class="address" required name="address"></div>
+				<input type="hidden" class="id" name="id" value="${this._user.id()}">
+				<div>Name: <input class="name" required name="name" value="${this._user.name()}"></div>
+				<div>Email: <input class="email" required name="email" value="${this._user.email()}"></div>
+				<div>Address: <input class="address" required name="address" value="${this._user.address()}"></div>
 				<div><input type="submit"></div>
 			`;
-
 		this._form.appendChild(this._buildLinkToList());
 
 		this._form.addEventListener('submit', event => {
 			event.preventDefault();
+			let inputId: HTMLInputElement = this._form.querySelector('.id');
 			let inputName: HTMLInputElement = this._form.querySelector('.name');
 			let inputEmail: HTMLInputElement = this._form.querySelector('.email');
 			let inputAddress: HTMLInputElement = this._form.querySelector('.address');
 			let user = new User(
-				0,
+				parseInt(inputId.value),
 				inputName.value,
 				inputEmail.value,
 				inputAddress.value
 			);
-			this._createUser(user);
+			this._updateUser(user);
 		});
 		return this._form;
 	}
@@ -56,15 +59,16 @@ class UserAddTemplate
 		return link;
 	}
 
-	private async _createUser(user: User)
+	private async _updateUser(user: User)
 	{
 		let data = {
+			id : user.id(),
 			name : user.name(),
 			email : user.email(),
 			address: user.address(),
 		};
 
-		let response = await fetch('/users/create/', {
+		let response = await fetch('/users/update/', {
 			method: 'POST',
 			headers: {
 			  'Content-Type': 'application/json'
@@ -73,11 +77,11 @@ class UserAddTemplate
 		});
 		if (response.ok) { 
 			let json = await response.json();
-			alert('User added');
+			alert('User updated');
 		} else {
 		  alert("Error HTTP: " + response.status);
 		}
 	}
 }
 
-export default UserAddTemplate;
+export default UserEditTemplate;

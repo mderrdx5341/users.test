@@ -1,5 +1,9 @@
 import User from './User';
 
+import AppEventManager from '../Event/AppEventManager';
+import AppEvent from '../Event/AppEvent';
+import AppEventData from '../Event/AppEventData';
+
 class UserListTemplate
 {
 	private _user: User;
@@ -14,16 +18,30 @@ class UserListTemplate
 		let html = document.createElement('div');
 		html.innerHTML = 
 			`
-			<div>
 				${this._user.id()}
 				${this._user.name()}
 				${this._user.email()}
 				${this._user.address()}
-				<a href="/user/${this._user.id()}/">Edit</a>
 				<input type="checkbox" name="userDelete" value="${this._user.id()}">
-			</div>
 			`
+		html.appendChild(this._buildLinkEdit());
+
 		return html;
+	}
+
+	private _buildLinkEdit() : HTMLElement
+	{
+		let link = document.createElement('a');
+		link.innerHTML = 'Edit';
+		link.setAttribute('href', "/");
+		link.addEventListener('click', event => {
+			event.preventDefault();
+			AppEventManager.trigger(
+				new AppEvent('changePanel', new AppEventData('EditUser'))
+			);
+		});
+
+		return link;
 	}
 }
 
