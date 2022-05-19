@@ -21,17 +21,17 @@ class App implements SubscriberInterface
 		this._appContainer.appendChild(await this._usersPanel.buildHtmlElement())
 	}
 
-	public invoke(eventName: string, eventData: AppEventData)
+	public async invoke(eventName: string, eventData: AppEventData)
 	{
 		switch(eventData.data()) {
 			case 'UserList':
-				this._usersPanel.switchToListUsers();
+				await this._usersPanel.switchToListUsers();
 				break;
 			case 'AddUser':
-				this._usersPanel.switchToAddUser();
+				await this._usersPanel.switchToAddUser();
 				break;
 			case 'EditUser':
-				this._usersPanel.switchToEditUser();
+				await this._usersPanel.switchToEditUser();
 				break;
 		}
 	}

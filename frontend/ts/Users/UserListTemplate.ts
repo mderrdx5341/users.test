@@ -22,7 +22,7 @@ class UserListTemplate
 				${this._user.name()}
 				${this._user.email()}
 				${this._user.address()}
-				<input type="checkbox" name="userDelete" value="${this._user.id()}">
+				<input type="checkbox" class="delete" name="userDelete" value="${this._user.id()}">
 			`
 		html.appendChild(this._buildLinkEdit());
 

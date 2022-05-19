@@ -72,4 +72,15 @@ class Users extends AbstractController
 		$response = ['id' => $data['id']];
 		return $this->jsonResponse($response);
 	}
+
+	public function delete() : string
+	{
+		$data = $this->jsonRequest();
+
+		foreach ($data as $id) {
+			$id = $this->usersRepository->deleteById($id); //TODO needs optimization
+		}
+
+		return $this->jsonResponse($data);
+	}
 }

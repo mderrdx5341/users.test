@@ -56,6 +56,7 @@ class UsersPanel
 		});
 
 		this._html.appendChild(this._buildHtmlButtonAdd());
+		this._html.appendChild(this._buildHtmlButtonDelete());
 	}
 
 	private async _addUser() : Promise<void>
@@ -130,6 +131,45 @@ class UsersPanel
 			);
 		});
 		return btn;
+	}
+
+	private _buildHtmlButtonDelete() : HTMLElement
+	{
+		let btn = document.createElement('button');
+		btn.innerHTML = 'Delete';
+		btn.addEventListener('click', event => {
+			this._deleteUsers();
+		});
+		return btn;
+	}
+
+	private async _deleteUsers() : Promise<void>
+	{
+		let checkboxes = document.querySelectorAll('.delete:checked');
+		if (checkboxes.length === 0) {
+			return;
+		} else {
+			let ids:number[] = [];
+			checkboxes.forEach((checkbox: HTMLInputElement) => {
+				ids.push(parseInt(checkbox.value));
+			});
+
+			let response = await fetch('/users/delete/', {
+				method: 'POST',
+				headers: {
+				  'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(ids)
+			});
+			if (response.ok) { 
+				let json = await response.json();
+				AppEventManager.trigger(
+					new AppEvent('changePanel', new AppEventData('UserList'))
+				);
+			} else {
+			  alert("Error HTTP: " + response.status);
+			}
+		}
 	}
 }
 

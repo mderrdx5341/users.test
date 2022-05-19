@@ -5,4 +5,5 @@ return [
 	'~^/users/create/$~' => ['controller' => 'Users', 'action' => 'create'],
 	'~^/users/get-by-id/$~' => ['controller' => 'Users', 'action' => 'getById'],
 	'~^/users/update/$~' => ['controller' => 'Users', 'action' => 'update'],
+	'~^/users/delete/$~' => ['controller' => 'Users', 'action' => 'delete'],
 ];

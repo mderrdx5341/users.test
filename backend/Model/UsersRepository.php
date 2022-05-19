@@ -74,5 +74,8 @@ class UsersRepository
 
 	public function deleteById(int $id)
 	{
+		$query = (new Query\Delete(self::TABLE_NAME))
+			->where('id', $id);
+		$this->db->query($query->build());
 	}
 }
