@@ -6,9 +6,8 @@ class Admin extends AbstractController
 {
 	private $adminRepository;
 
-	public function afterInit()
-	{
-		$this->adminRepository = new AdminRepository($this->db);
+	public function __construct(AdminRepository $adminRepository) {
+		$this->adminRepository = $adminRepository;
 	}
 
 	public function auth() : string

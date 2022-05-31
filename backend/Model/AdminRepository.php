@@ -1,12 +1,13 @@
 <?php
 namespace Model;
 use DB\Query;
+use DB\DB;
 
 class AdminRepository
 {
 	const TABLE_NAME = 'admin';
 
-	public function __construct($db)
+	public function __construct(DB $db)
 	{
 		$this->db = $db;
 	}

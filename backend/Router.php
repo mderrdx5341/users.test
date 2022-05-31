@@ -2,14 +2,13 @@
 class Router
 {
 	private $routeMap;
-	private $request;
-	private $db;
+	private $diContainer;
 
-	public function __construct($page, $db)
+	public function __construct(string $page, DIContainer $diContainer)
 	{
 		$this->routeMap = include __DIR__ . '/../.route_map.php';
+		$this->diContainer = $diContainer;
 		$this->page = $page;
-		$this->db = $db;
 	}
 
 	public function run()
@@ -20,7 +19,7 @@ class Router
 				$controllerName = $ex['controller'];
 				$action = $ex['action'];
 				$controllerClass = 'Controllers\\' . $controllerName;
-				$controller = new $controllerClass($this->db);
+				$controller = $this->diContainer->get($controllerClass);
 				
 				unset($args[0]);
 				return call_user_func_array(array($controller, $action), $args);

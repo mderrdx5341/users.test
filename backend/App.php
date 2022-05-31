@@ -3,8 +3,8 @@ use DB\DB;
 
 class App
 {
+	private $diContainer;
 	private $config;
-	private $db;
 	private $router;
 
 	public function __construct()
@@ -15,19 +15,24 @@ class App
 
 	public function init()
 	{
+		$this->diContainer = new DIContainer();
 		$this->config = new Config();
-		$this->db = new DB(
-			$this->config->param('host'),
-			$this->config->param('db'),
-			$this->config->param('user'),
-			$this->config->param('password')
+		$this->diContainer->addSingleton(
+			'DB\DB',
+			'DB\DB',
+			[
+				$this->config->param('host'),
+				$this->config->param('db'),
+				$this->config->param('user'),
+				$this->config->param('password')
+			]
 		);
-		$this->router = new Router($_SERVER['REQUEST_URI'], $this->db);
+		$this->router = new Router($_SERVER['REQUEST_URI'], $this->diContainer);
 	}
 
 	public function run()
 	{
-		echo $this->router->run();
+		print $this->router->run();
 	}
 
 	public static function isAuth() : bool

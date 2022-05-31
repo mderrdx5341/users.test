@@ -2,14 +2,14 @@
 namespace Controllers;
 use Model\UsersRepository;
 use Model\User;
+use DB\DB;
 
 class Users extends AbstractController
 {
 	private UsersRepository $usersRepository;
 
-	protected function afterInit()
-	{
-		$this->usersRepository = new UsersRepository($this->db);
+	public function __construct(UsersRepository $userRepository) {
+		$this->usersRepository = $userRepository;
 	}
 
 	public function index() : string

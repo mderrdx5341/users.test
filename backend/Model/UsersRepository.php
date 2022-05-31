@@ -1,13 +1,14 @@
 <?php
 namespace Model;
 use DB\Query;
+use DB\DB;
 
 class UsersRepository
 {
 	const TABLE_NAME = 'users';
 	private $db;
 
-	public function __construct($db)
+	public function __construct(DB $db)
 	{
 		$this->db = $db;
 	}

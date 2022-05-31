@@ -3,15 +3,6 @@ namespace Controllers;
 
 abstract class AbstractController
 {
-	protected $db;
-
-	public function __construct($db) {
-		$this->db = $db;
-		$this->afterInit();
-	}
-
-	protected function afterInit() {}
-
 	public function jsonResponse($data)
 	{
 		header('Content-Type: application/json; charset=utf-8');
